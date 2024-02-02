@@ -7,18 +7,17 @@ const entriesObject = [];
 
 //create entry button functionality, unsure if i need a counter as of right now, but I will remove it later if not needed
 const createEntry = () => {
-  const counter = document.querySelectorAll("input") + 1;
-  addEntryButtonElement.classList.add("hidden");
-  entryContainerElement.classList.add("hidden");
+  addEntryButtonElement.classList.toggle("hidden");
+  entryContainerElement.classList.toggle("hidden");
   const HTML = `
-    <i id="cancel-icon-${counter}" class="cancel-icon fa-solid fa-x"></i>
-    <label for="title-input-${counter}"><strong>Title</strong></label>
-    <input required type="text" id="title-input-${counter}">
-    <label for="date-input-${counter}"><strong>Date</strong></label>
-    <input required id="date-input-${counter}" type="date">
-    <label for="description-input-${counter}"><strong>Description</strong></label>
-    <textarea cols="20" rows="10" required id="description-input-${counter}"></textarea>
-    <button id="add-task-button-${counter}" class="large-button">Add Task</button>    
+    <i onclick="cancel()" id="cancel-icon" class="cancel-icon fa-solid fa-x"></i>
+    <label for="title-input"><strong>Title</strong></label>
+    <input required type="text" id="title-input">
+    <label for="date-input"><strong>Date</strong></label>
+    <input required id="date-input" type="date">
+    <label for="description-input"><strong>Description</strong></label>
+    <textarea cols="20" rows="10" required id="description-input"></textarea>
+    <button onclick="addTask()" id="add-task-button" class="large-button">Add Task</button>    
     `;
   createEntryPageElement.innerHTML = HTML;
 };
@@ -29,11 +28,44 @@ addEntryButtonElement.addEventListener("click", () => {
 
 //add task functionality
 
-const addTask = ()=>{
-const titleEntry = document.getElementById('title-input-')
-entriesObject.push({
+const addTask = () => {
+  const titleEntry = document.getElementById("title-input");
+  const dateEntry = document.getElementById("date-input");
+  const descriptionEntry = document.getElementById("description-input");
+  entriesObject.push({
+    title: `${titleEntry.value}`,
+    dateEntry: `${dateEntry.value}`,
+    description: `${descriptionEntry.value}`,
+  });
 
-})
-}
+  //resetting the page
+  addEntryButtonElement.classList.toggle("hidden");
+  entryContainerElement.classList.toggle("hidden");
+  createEntryPageElement.innerHTML = "";
 
+  const counter = document.querySelectorAll(".entry");
 
+  //creating HTML
+  const HTML = `
+  <div class="entry" id="entry-${counter}">
+  <label for="title-entry-${counter}"><strong>Title: </strong><p id="title-entry-${counter}">${titleEntry.value}</p></label>
+  <br>
+  <label for="date-entry-${counter}"><strong>Date: </strong><p id="date-entry-${counter}">${dateEntry.value}</p></label>
+  <br>
+  <label for="description-entry-${counter}"><strong>Description: </strong><p id="description-entry-${counter}">${descriptionEntry.value}</p></label>
+  <br>
+  <button id="edit-button-${counter}">Edit</button>
+  <button id="delete-button-${counter}">Delete</button>
+  </div>
+  `;
+
+  entryContainerElement.insertAdjacentHTML("beforeend", HTML);
+  localStorage.setItem(JSON.stringify(entriesObject));
+};
+
+//cancel functionality
+const cancel = () => {
+  addEntryButtonElement.classList.toggle("hidden");
+  entryContainerElement.classList.toggle("hidden");
+  createEntryPageElement.innerHTML = "";
+};
