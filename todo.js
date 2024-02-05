@@ -67,7 +67,7 @@ const description = entriesObject[counter].description;
   <br>
   <label for="description-entry-${counter}"><strong>Description: </strong><p id="description-entry-${counter}">${description}</p></label>
   <br>
-  <button id="edit-button-${counter}">Edit</button>
+  <button onclick="createEditEntryWindow()" id="edit-button-${counter}">Edit</button>
   <button onclick="deleteEntry(${counter})" id="delete-button-${counter}">Delete</button>
   </div>
   `;
@@ -92,7 +92,7 @@ const updateEntryContainerLocalStorage = (element)=>{
     <br>
     <label for="description-entry-${element}"><strong>Description: </strong><p id="description-entry-${element}">${description}</p></label>
     <br>
-    <button id="edit-button-${element}">Edit</button>
+    <button onclick="createEditEntryWindow(${element})" id="edit-button-${element}">Edit</button>
     <button onclick="deleteEntry(${element})" id="delete-button-${element}">Delete</button>
     </div>
     `;
@@ -122,4 +122,21 @@ const selectedEntry = document.getElementById(`entry-${counter}`);
 entriesObject.splice(`${counter}`,1);
 selectedEntry.remove();
 localStorage.setItem('entryData',JSON.stringify(entriesObject));
+}
+
+//edit functionality
+const createEditEntryWindow = (counter)=>{
+  addEntryButtonElement.classList.toggle("hidden");
+  entryContainerElement.classList.toggle("hidden");
+  const HTML = `
+    <i onclick="cancel()" id="cancel-icon" class="cancel-icon fa-solid fa-x"></i>
+    <label for="title-input"><strong>Title</strong></label>
+    <input value="${entriesObject[counter].title}" required type="text" id="title-input">
+    <label for="date-input"><strong>Date</strong></label>
+    <input value="${entriesObject[counter].date}" required id="date-input" type="date">
+    <label for="description-input"><strong>Description</strong></label>
+    <textarea value="${entriesObject[counter].description}" cols="20" rows="10" required id="description-input"></textarea>
+    <button id="edit-task-button" class="large-button">Edit Task</button>    
+    `;
+  createEntryPageElement.innerHTML = HTML;
 }
