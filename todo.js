@@ -21,7 +21,7 @@ const createEntryWindow = () => {
   <label for="title"><strong>Title</strong></label><input type="text" id="title">
   <label for="date"><strong>Date</strong></label><input id="date" type="date">
   <label for="description"><strong>Description</strong></label><textarea id="description" cols="20" rows="20"></textarea>
-  <button onclick="addEntry()" class="large-button">Add Task</button>
+  <button onclick="addEntryObject()" class="large-button">Add Task</button>
   `;
 };
 
@@ -61,7 +61,7 @@ const addEntryObject = () => {
 
   //add entry for id
 
-  addEntry(entriesObjects.findIndex((element,index) => entriesObjects.index.id === newObj.id));
+  addEntry(entriesObjects.findIndex((element,index) => entriesObjects[index].id === newObj.id));
 };
 
 const addEntry = (index) => {
@@ -88,7 +88,7 @@ const addEntry = (index) => {
 //open edit entry window
 const createEditEntry = (id) => {
   //retrieve object info
-  const currentObj = entriesObjects[id];
+  const currentObj = entriesObjects[entriesObjects.findIndex((element)=>element.id===id)];
 
   addEntryButtonElement.classList.toggle("hidden");
   entryContainerElement.classList.toggle("hidden");
@@ -103,26 +103,26 @@ const createEditEntry = (id) => {
 };
 
 //edit entry functionality
-const editEntry = (id) => {
+const editEntry = (iD) => {
   const titleInput = document.getElementById("title");
   const dateInput = document.getElementById("date");
   const descriptionInput = document.getElementById("description");
 
   entriesObjects.splice(
-    entriesObjects.findIndex((element) => element.id === id),
+    entriesObjects.findIndex((element) => element.id === iD),
     1,
     {
       title: titleInput.value,
       date: dateInput.value,
       description: descriptionInput.value,
-      id: id, //id property===id parameter
+      id: iD, //id property===id parameter
     }
   );
   localStorage.setItem("entryData", JSON.stringify(entriesObjects));
 
   //dom edit
-  const currentObj = entriesObjects[id];
-  const currentDOMEntry = document.getElementById(`entry-${id}`);
+  const currentObj = entriesObjects[entriesObjects.findIndex((element)=>element.id===iD)]
+  const currentDOMEntry = document.getElementById(`entry-${iD}`);
   currentDOMEntry.innerHTML = `
 <div class="entry" id="entry-${currentObj.id}">  
   <label for="display-title-${currentObj.id}"><strong>Title: </strong></label><p id="display-title-${currentObj.id}">${currentObj.title}</p><br>
