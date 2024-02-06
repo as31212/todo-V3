@@ -8,7 +8,6 @@ let entriesObjects = [];
 //will be used to keep track of what objects go to which dom entries
 let counter = 0;
 
-
 //local storage on page reset functionality
 
 //creating the create task page
@@ -61,7 +60,11 @@ const addEntryObject = () => {
 
   //add entry for id
 
-  addEntry(entriesObjects.findIndex((element,index) => entriesObjects[index].id === newObj.id));
+  addEntry(
+    entriesObjects.findIndex(
+      (element, index) => entriesObjects[index].id === newObj.id
+    )
+  );
 };
 
 const addEntry = (index) => {
@@ -76,7 +79,7 @@ const addEntry = (index) => {
   <label for="display-date-${currentObj.id}"><strong>Date: </strong></label><p id="display-date-${currentObj.id}">${currentObj.date}</p><br>
   <label for="display-description-${currentObj.id}"><strong>Description: </strong></label><p id="display-description-${currentObj.id}">${currentObj.description}</p><br>
   <button onclick="createEditEntry(${currentObj.id})" id="edit-${currentObj.id}">Edit</button>
-  <button onclick="deleteEntry(${currentObj.id})" id="delete-${currentObj.id}">Delete</button>
+  <button onclick="deleteWindow(${currentObj.id})" id="delete-${currentObj.id}">Delete</button>
   </div>
   `
   );
@@ -88,7 +91,8 @@ const addEntry = (index) => {
 //open edit entry window
 const createEditEntry = (id) => {
   //retrieve object info
-  const currentObj = entriesObjects[entriesObjects.findIndex((element)=>element.id===id)];
+  const currentObj =
+    entriesObjects[entriesObjects.findIndex((element) => element.id === id)];
 
   addEntryButtonElement.classList.toggle("hidden");
   entryContainerElement.classList.toggle("hidden");
@@ -121,7 +125,8 @@ const editEntry = (iD) => {
   localStorage.setItem("entryData", JSON.stringify(entriesObjects));
 
   //dom edit
-  const currentObj = entriesObjects[entriesObjects.findIndex((element)=>element.id===iD)]
+  const currentObj =
+    entriesObjects[entriesObjects.findIndex((element) => element.id === iD)];
   const currentDOMEntry = document.getElementById(`entry-${iD}`);
   currentDOMEntry.innerHTML = `
 <div class="entry" id="entry-${currentObj.id}">  
@@ -129,7 +134,7 @@ const editEntry = (iD) => {
   <label for="display-date-${currentObj.id}"><strong>Date: </strong></label><p id="display-date-${currentObj.id}">${currentObj.date}</p><br>
   <label for="display-description-${currentObj.id}"><strong>Description: </strong></label><p id="display-description-${currentObj.id}">${currentObj.description}</p><br>
   <button onclick="createEditEntry(${currentObj.id})" id="edit-${currentObj.id}">Edit</button>
-  <button onclick="deleteEntry(${currentObj.id})" id="delete-${currentObj.id}">Delete</button>
+  <button onclick="deleteWindow(${currentObj.id})" id="delete-${currentObj.id}">Delete</button>
   </div>
 `;
 
@@ -138,8 +143,32 @@ const editEntry = (iD) => {
   entryContainerElement.classList.toggle("hidden");
   createEntryPageElement.innerHTML = "";
 };
+//create delete entry window modal
 
-//delete entry functionality
+const deleteWindow = (id) => {
+  addEntryButtonElement.classList.toggle("hidden");
+  entryContainerElement.classList.toggle("hidden");
+  modalPageElement.innerHTML = `
+  <div>
+<i class="red-x fa-solid fa-circle-xmark"></i>
+<h2>Are you sure ?</h2>
+<p>deleting this entry will remove it from the local storage. This process can not be undone.</p>
+<button class="small-button" onclick="cancelModal()">Cancel</button>
+<button class="small-button" onclick="deleteEntry(${id})">Delete</button>
+</div>
+`;
+  modalPageElement.showModal();
+};
+
+//cancel modal
+const cancelModal = () => {
+  addEntryButtonElement.classList.toggle("hidden");
+  entryContainerElement.classList.toggle("hidden");
+  modalPageElement.innerHTML = "";
+  modalPageElement.close();
+};
+
+//delete entry functionality, this will also include a modal feature before hand
 const deleteEntry = (id) => {
   //find the index of the object that needs to be deleted, then splice the object out of the array. then I update the local storage
   entriesObjects.splice(
@@ -151,13 +180,16 @@ const deleteEntry = (id) => {
   //removing the element from the dom
   const currentEntry = document.getElementById(`entry-${id}`);
   currentEntry.remove();
+
+  //cancel modal
+  cancelModal();
 };
 
 //local storage reset obj and dom and counter
-if(localStorage.length){
+if (localStorage.length) {
   entriesObjects = JSON.parse(localStorage.getItem("entryData"));
-  entriesObjects.forEach((element,index) => {
-   addEntry(index);
+  entriesObjects.forEach((element, index) => {
+    addEntry(index);
   });
-  counter = entriesObjects.length-1;
- }
+  counter = entriesObjects.length - 1;
+}

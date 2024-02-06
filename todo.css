@@ -68,11 +68,28 @@ main {
   text-align: left;
   margin-top: 1rem;
 }
-.entry button {
+.entry button,
+.small-button {
   margin-top: 0.5rem;
   margin-left: 0.5rem;
   padding: 0rem 2rem;
   background-color: var(--orange);
   border-color: var(--orange);
   font-size: 1rem;
+}
+#modal-page {
+  margin: 2em auto;
+  border-radius: 10px;
+  padding: 1em;
+  width: 35%;
+  height: 60%;
+}
+#modal-page p {
+  margin: 1em;
+  font-size: 1.5rem;
+}
+.red-x {
+  scale: 500%;
+  margin: 2em auto 3em auto;
+  color: var(--red);
 }
