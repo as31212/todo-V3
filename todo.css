@@ -52,7 +52,7 @@ main {
 }
 #create-entry-page textarea {
   width: 100%;
-  padding: 0.5;
+  padding: 0.2rem;
   margin: 1em 0em;
 }
 .cancel-icon {
